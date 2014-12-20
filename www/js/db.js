@@ -10,8 +10,8 @@ db.transaction(function(tx) {
 });
 
 db.transaction(function(tx) {
-	tx.executeSql("delete * from Word");
-	tx.executeSql("delete * from WTask");
+    tx.executeSql("delete * from Word");
+    tx.executeSql("delete * from WTask");
 })
 
 var w1 = WDB.addWord( "Prey",
@@ -39,75 +39,77 @@ persistence.db.implementation
 
 
 var WDB = (function() {
-    function init(){
+    var DictWord, Word, WTask, WTaskType ;
 
+    function init() {
+        persistence.store.cordovasql.config(
+            persistence,
+            'ww2',
+            '1.0', // DB version
+            'WW2 database', // DB display name
+            //   10 * 1024 * 1024, // DB size
+            0 // SQLitePlugin Background processing disabled
+        );
+
+        /*
+        persistence.store.websql.config(
+            persistence,
+            'ww2',
+            '0.0.3', // DB version
+            'WW2 database', // DB display name
+            5 * 1024 * 1024, // DB size
+            0 // SQLitePlugin Background processing disabled
+        );
+        */
+        //persistence.store.memory.config(persistence); 
+        persistence.debug = true;
+        WDB.DictWord = persistence.define('DictWord', {
+            name: "TEXT",
+            meaning: "TEXT",
+            dictId: "TEXT"
+        });
+        WDB.DictWord.index("name");
+
+        WDB.Word = persistence.define('Word', {
+            name: "TEXT",
+            meaning: "TEXT",
+            yinbiao: "TEXT"
+        });
+        WDB.Word.index("name");
+
+        WDB.WTask = persistence.define('WTask', {
+
+            stage: "INT",
+            taskType: "INT",
+            lastReviewDate: "DATE",
+            nextReviewDate: "DATE"
+        });
+        WDB.WTaskType = {
+            Tingxie: 0
+        };
+
+        WDB.Word.hasMany("tasks", WDB.WTask, "word");
+        WDB.WTask.index("taskType");
+        WDB.WTask.index(["nextReviewDate", "taskType"]);
+        persistence.schemaSync();
     }
-     
-     persistence.store.cordovasql.config(
-        persistence,
-        'ww2',
-        '1.0', // DB version
-        'WW2 database', // DB display name
-     //   10 * 1024 * 1024, // DB size
-        0 // SQLitePlugin Background processing disabled
-    ); 
- 
-    /*
-	persistence.store.websql.config(
-        persistence,
-        'ww2',
-        '0.0.3', // DB version
-        'WW2 database', // DB display name
-        5 * 1024 * 1024, // DB size
-        0 // SQLitePlugin Background processing disabled
-    );
-    */
-//persistence.store.memory.config(persistence);	
-persistence.debug = true;
-    var DictWord = persistence.define('DictWord', {
-        name: "TEXT",
-        meaning: "TEXT",
-        dictId: "TEXT"
-    });
-    DictWord.index("name");
 
-    var Word = persistence.define('Word', {
-        name: "TEXT",
-        meaning: "TEXT",
-        yinbiao: "TEXT"
-    });
-    Word.index("name");
 
-    var WTask = persistence.define('WTask', {
 
-        stage: "INT",
-        taskType: "INT",
-        lastReviewDate: "DATE",
-        nextReviewDate: "DATE"
-    });
-    var WTaskType = {
-        Tingxie: 0
-    };
-
-    Word.hasMany("tasks", WTask, "word"); 
-    WTask.index("taskType");
-    WTask.index(["nextReviewDate", "taskType"]);
-
-persistence.schemaSync();
 
     function _queryTaskByType(taskType) {
         return WTask.all()
             .filter("taskType", '=', taskType)
-            .and( new persistence.PropertyFilter("stage", "!=", -2))
-            .and( new persistence.PropertyFilter("nextReviewDate", "<", new Date()))
-            .prefetch("word").order("nextReviewDate",true)
-            ;
+            .and(new persistence.PropertyFilter("stage", "!=", -2))
+            .and(new persistence.PropertyFilter("nextReviewDate", "<", new Date()))
+            .prefetch("word").order("nextReviewDate", true);
     }
 
     return {
-        DictWord:DictWord,
-        Word:Word,
-        WTask:WTask,
+        init: init,
+        DictWord: DictWord,
+        Word: Word,
+        WTask: WTask,
         addTingxieTask: function(word) {
             var t = new WTask({
                 word: word,
@@ -119,39 +121,47 @@ persistence.schemaSync();
             persistence.flush();
             return t;
         },
-        flush:function(task){ 
+        flush: function(task) {
             persistence.flush();
         },
         addWord: function(name, meaning, yinbiao) {
-            var w = new Word({name: name, meaning: meaning, yinbiao: yinbiao});
+            var w = new Word({
+                name: name,
+                meaning: meaning,
+                yinbiao: yinbiao
+            });
             persistence.add(w);
             persistence.flush();
             return w;
         },
         addDictWord: function(name, meaning, dictId) {
-            var w = new DictWord({name: name, meaning: meaning, dictId: dictId});
+            var w = new DictWord({
+                name: name,
+                meaning: meaning,
+                dictId: dictId
+            });
             persistence.add(w);
             persistence.flush();
             return w;
         },
-        lockupDictWord: function(name, dictId,limit ,callback) {
-            if(!limit) limit = 20 
-            var ts = DictWord.all().filter("name",">=",name)
-            if(dictId) 
-                ts.and( new persistence.PropertyFilter("dictId", "=", dictId))
+        lockupDictWord: function(name, dictId, limit, callback) {
+            if (!limit) limit = 20
+            var ts = DictWord.all().filter("name", ">=", name)
+            if (dictId)
+                ts.and(new persistence.PropertyFilter("dictId", "=", dictId))
 
-             ts.list(null, function(rs) {
-                console.log("rs",rs);
+            ts.list(null, function(rs) {
+                console.log("rs", rs);
                 callback(rs);
             });
         },
 
-        checkAndAddWordAndTingxieTask: function(name, meaning, yinbiao){
+        checkAndAddWordAndTingxieTask: function(name, meaning, yinbiao) {
             var self = this;
-            this.queryWord(name,function(w){
-                if(!w){
+            this.queryWord(name, function(w) {
+                if (!w) {
 
-                    var word = self.addWord(name,meaning,yinbiao);
+                    var word = self.addWord(name, meaning, yinbiao);
                     self.addTingxieTask(word);
                 }
             })
@@ -159,39 +169,39 @@ persistence.schemaSync();
         queryCurrentTaskCount: function(taskType, callback) {
             var ts = _queryTaskByType(taskType);
             ts.count(null, function(c) {
-            	console.log("ok");
+                console.log("ok");
                 callback(c);
             });
         },
         queryCurrentTask: function(taskType, callback) {
             var ts = _queryTaskByType(taskType);
             ts.list(null, function(rs) {
-            	console.log("rs"+rs);
+                console.log("rs" + rs);
                 callback(rs);
             });
         },
         queryWord: function(name, callback) {
-            
-            Word.all().filter("name","=",name).one(null, function(w) {
-            	console.log("w="+w);
+
+            Word.all().filter("name", "=", name).one(null, function(w) {
+                console.log("w=" + w);
                 callback(w);
             });
         },
         queryAllWord: function(callback) {
-            
+
             Word.all().list(null, function(ws) {
-            	console.log("ws="+ws);
+                console.log("ws=" + ws);
                 callback(ws);
             });
         },
         queryAllTask: function(callback) {
-            
+
             WTask.all().list(null, function(ws) {
-            	console.log("ws="+ws);
+                console.log("ws=" + ws);
                 callback(ws);
             });
         },
-        removeAll: function(){
+        removeAll: function() {
             WTask.all().destroyAll();
             Word.all().destroyAll();
             localStorage.removeItem("latestKiiWordCreatedAt");

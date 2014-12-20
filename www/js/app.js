@@ -28,6 +28,9 @@ function onDeviceReady() {
     }catch(err){
         console.error(err)
     }
+    console.log("start");
+    WDB.init();
+    console.log("done");
     angular.bootstrap(document, ['myApp']);
 }
 if(document.onDeviceReady ){
