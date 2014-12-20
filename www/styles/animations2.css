@@ -1,0 +1,142 @@
+
+@keyframes inFromRight {
+    0%   {  -webkit-transform: translate( 100%,0%);
+    -moz-transform: translate( 100%,0%);
+    -o-transform: translate( 100%,0%);
+    transform: translate( 100%,0%);/* from: blue */ }
+  
+    100% {  -webkit-transform: translate(0%,0%);
+    -moz-transform: translate(0%,0%);
+    -o-transform: translate(0%,0%);
+    transform: translate(0%,0%);/* from: blue */  /* to: blue   */ }
+}
+@-webkit-keyframes inFromRight {
+    0%   {  -webkit-transform: translate( 100%,0%);
+    -moz-transform: translate( 100%,0%);
+    -o-transform: translate( 100%,0%);
+    transform: translate( 100%,0%);/* from: blue */ }
+  
+  
+    100% {  -webkit-transform: translate(0%,0%);
+    -moz-transform: translate(0%,0%);
+    -o-transform: translate(0%,0%);
+    transform: translate(0%,0%);/* from: blue */  /* to: blue   */ }
+}
+
+
+
+@keyframes inFromLeft {
+    0%   {  -webkit-transform: translate( -100%,0%);
+    -moz-transform: translate( -100%,0%);
+    -o-transform: translate( -100%,0%);
+    transform: translate( -100%,0%);/* from: blue */ }
+  
+    100% {  -webkit-transform: translate(0%,0%);
+    -moz-transform: translate(0%,0%);
+    -o-transform: translate(0%,0%);
+    transform: translate(0%,0%);/* from: blue */  /* to: blue   */ }
+}
+@-webkit-keyframes inFromLeft {
+  0%   {  -webkit-transform: translate( -100%,0%);
+    -moz-transform: translate( -100%,0%);
+    -o-transform: translate( -100%,0%);
+    transform: translate( -100%,0%);/* from: blue */ }
+  
+    100% {  -webkit-transform: translate(0%,0%);
+    -moz-transform: translate(0%,0%);
+    -o-transform: translate(0%,0%);
+    transform: translate(0%,0%);/* from: blue */  /* to: blue   */ }
+}
+
+
+
+@keyframes outToRight {
+    0%   {  -webkit-transform: translate(0%,0%);
+    -moz-transform: translate(0%,0%);
+    -o-transform: translate(0%,0%);
+    transform: translate(0%,0%);/* from: blue */  /* to: blue   */ }
+  
+    100% {  -webkit-transform: translate( 100%,0%);
+    -moz-transform: translate( 100%,0%);
+    -o-transform: translate( 100%,0%);
+    transform: translate( 100%,0%);/* from: blue */ }
+}
+
+@-webkit-keyframes outToRight {
+       0%   {  -webkit-transform: translate(0%,0%);
+    -moz-transform: translate(0%,0%);
+    -o-transform: translate(0%,0%);
+    transform: translate(0%,0%);/* from: blue */  /* to: blue   */ }
+  
+    100% {  -webkit-transform: translate( 100%,0%);
+    -moz-transform: translate( 100%,0%);
+    -o-transform: translate( 100%,0%);
+    transform: translate( 100%,0%);/* from: blue */ }
+}
+ 
+
+@keyframes outToLeft {
+     0%   {  -webkit-transform: translate(0%,0%);
+    -moz-transform: translate(0%,0%);
+    -o-transform: translate(0%,0%);
+    transform: translate(0%,0%);/* from: blue */  /* to: blue   */ }
+  
+    100% {  -webkit-transform: translate( -100%,0%);
+    -moz-transform: translate( -100%,0%);
+    -o-transform: translate( -100%,0%);
+    transform: translate( -100%,0%);/* from: blue */ }
+}
+@-webkit-keyframes outToLeft {
+   0%   {  -webkit-transform: translate(0%,0%);
+    -moz-transform: translate(0%,0%);
+    -o-transform: translate(0%,0%);
+    transform: translate(0%,0%);/* from: blue */  /* to: blue   */ }
+  
+    100% {  -webkit-transform: translate( -100%,0%);
+    -moz-transform: translate( -100%,0%);
+    -o-transform: translate( -100%,0%);
+    transform: translate( -100%,0%);/* from: blue */ }
+}
+
+.view-animate {
+
+      position: absolute;
+      width: 100%;
+left: 0;
+
+  } 
+ .view-animate.lowPage.ng-enter.ng-enter-active {
+ 
+
+  }
+
+  .view-animate.lowPage.ng-enter , .upPage.ng-leave +div  {
+
+     -webkit-animation: inFromLeft 1s linear   ;
+    animation: inFromLeft 1s linear  ;
+      
+
+  } 
+
+ 
+ .view-animate.lowPage.ng-leave, .upPage.ng-enter +div{ 
+ 	  -webkit-animation: outToLeft 1s linear   ;
+    animation: outToLeft 1s linear  ;
+ }
+    
+  .view-animate.lowPage.ng-leave.ng-leave-active { 
+  }
+
+ 
+  
+  .view-animate.upPage.ng-enter , .lowPage.ng-leave +div {
+
+     -webkit-animation: inFromRight 1s linear   ;
+    animation: inFromRight 1s linear  ;
+      
+
+  }  
+ .view-animate.upPage.ng-leave, .lowPage.ng-enter +div{ 
+    -webkit-animation: outToRight 1s linear   ;
+    animation: outToRight 1s linear  ;
+ }

@@ -11,4 +11,9 @@
     <access origin="*" />
     <gap:platform name="android" />
     <gap:plugin name="com.brodysoft.sqliteplugin" version="1.0.0" />
+
+     <gap:plugin name="org.apache.cordova.file" version="1.0.1" />
+    <gap:plugin name="org.apache.cordova.file-transfer" version="0.4.2" /> 
+    <gap:plugin name="de.appplant.cordova.plugin.local-notification" version="0.7.4" />
+    <gap:plugin name="org.tt.plugin.tts"  /> 
 </widget>

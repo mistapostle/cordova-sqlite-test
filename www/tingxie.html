@@ -1,0 +1,68 @@
+<ons-page ng-controller="TingxieController" id="tingxie" style="background-color: #f9f9f9;">
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+        <div class="center">Details11</div>
+    </ons-toolbar>
+    <div>
+        {{ct.word.meaning}}
+        <p id="word" ng-show="isShowName" style="padding-left:10px">{{ct.word.name}}</p>
+        <ons-row align="center">
+            <ons-col size="40px" align="left">
+                <div>
+                    <ons-button modifier="quiet">
+                        <ons-icon icon="volume-up" size="40px"></ons-icon>
+                    </ons-button>
+                </div>
+            </ons-col>
+            <ons-col>
+                <div>
+                    音标: {{ct.word.yinbiao}}
+                </div>
+            </ons-col>
+        </ons-row>
+
+        <ons-row align="center" style="padding-left:10px">
+            <ons-col align="left">
+                <div ng-show="isShowMeaning"  > {{ct.word.meaning}}
+                </div>
+                <ons-button ng-click="isShowMeaning = true">Show Meaning
+                    </ons-btton>
+            </ons-col>
+            <ons-col size="50px">
+                <ons-button modifier="quiet">
+                    <ons-icon icon="chevron-right" size="40px"></ons-icon>
+                </ons-button>
+
+            </ons-col>
+        </ons-row>
+        <canvas id="flexBox" width="100" height="100"></canvas>
+    </div>
+    <canvas  id="inputZone" width="200" height="100" style=" border: solid;"> </canvas>
+<button id="clear">clear</button>
+
+     
+    <ons-bottom-toolbar >
+    <div ns-show="isInputing"> 
+                <ns-toolbar-button ng-click="isShowName = true ; isInputing=false">确定</ons-btton>
+           
+                <ns-toolbar-button>重置</ons-btton> 
+    </div>
+    <div ns-hide="true">
+        <ons-row>
+            <ons-col>
+                <div  style="padding-left:10px ; padding-right:10px">
+                <ons-button modifier="large">记住了</ons-btton>
+                </div>
+            </ons-col>
+            <ons-col>
+                <ons-button modifier="large"ng-click="isShowName = false ; isInputing=True">重置</ons-btton>
+            </ons-col>
+            <ons-col>
+                <ons-button modifier="large">没记住</ons-btton>
+            </ons-col>
+        </ons-row>
+    </div>
+    </ons-bottom-toolbar >
+</ons-page>

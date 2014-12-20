@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>My App</title>
+
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css">
+    <link rel="stylesheet" href="styles/app.css" />
+    
+    <script>
+    ons.ready(function() {
+        var first = true;
+        $(document.body).on('pageinit', '#tingxie', function() {
+            console.log("pageinit ,, tingxie");
+            //if(first){
+                jamTouch(); //need to be bind very time it loaded otherwise touch zone wont work from second load 
+             //   first = false;
+            //}
+        })
+    });
+    </script>
+    <style>
+    .ng-hide {
+        /* this is just another form of hiding an element */
+        visibility: hidden!important;
+    }
+    </style>
+
+</head>
+
+<body>
+
+    <ons-navigator>
+        <ons-page style="background-color: #f9f9f9">
+            <ons-toolbar>
+                <div class="center">Words11</div>
+            </ons-toolbar>
+
+            <ons-list ng-controller="MasterController">
+                <ons-list>
+                    <ons-list-item class="list__item--tappable list__item__line-height" modifier="chevron" onclick="ons.navigator.pushPage('wordlist.html')">单词本</ons-list-item>
+                    <ons-list-item class="list__item--tappable list__item__line-height" modifier="chevron" ng-click="showTingxie()">听写 ({{ tingxieCount }})</ons-list-item>
+                    <ons-list-item class="list__item--tappable list__item__line-height" modifier="chevron" onclick="ons.navigator.pushPage('zhaoju.html')">造句</ons-list-item>
+                </ons-list>
+                </ons-list-item>
+            </ons-list>
+        </ons-page>
+    </ons-navigator>
+
+</body>
+
+</html>

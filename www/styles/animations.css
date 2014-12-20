@@ -1,0 +1,109 @@
+  /*
+  .view-animate {
+     position: relative; 
+
+  }
+
+  .view-animate.ng-enter  {
+    transition-property: left;
+     
+    transition-duration: 3s;
+
+    top:-150px;
+  }
+  .view-animate.ng-leave {
+
+    transition-property: left;
+     
+    transition-duration: 3s;
+    left:0;
+  }
+
+  .view-animate.ng-enter {
+
+    left:100%;
+  }
+  .view-animate.ng-enter.ng-enter-active { 
+
+    left:0;
+  }
+  .view-animate.ng-leave.ng-leave-active { 
+    left:-100%;
+  }
+*/
+
+@keyframes slipFromRight {
+    0%   {  translate(100%, 0px); /* from: blue */ }
+  
+    100% {  translate(0%, 0px); /* to: blue   */ }
+}
+@-webkit-keyframes slipFromRight {
+    00%   {  translate(100%, 0px); /* from: blue */ }
+  
+    100% {  translate(0%, 0px); /* to: blue   */ }
+}
+
+
+  .view-animate {
+
+      position: relative;
+
+  }
+
+  .view-animate.ng-enter  ,  .view-animate.ng-leave{
+
+      -webkit-transition: 1s linear all; /*Safari/Chrome */
+
+      transition: 1s linear all; /*
+      All other modern browsers and IE10+ */
+
+      
+
+  }
+  .view-animate.ng-enter {
+    left: 100%; /*use left , don't smooth! */
+  }
+
+  .view-animate.ng-enter.ng-enter-active {
+
+      left: 0%;
+
+  }
+ .view-animate.ng-leave{
+      left:0%;
+ }
+    
+  .view-animate.ng-leave.ng-leave-active {
+
+      left: -100%;
+
+  }
+/*
+  .view-animate.ng-enter {
+      -webkit-transition: 1s linear all;
+      Safari/Chrome transition: 1s linear all;
+      All other modern browsers and IE10+ -webkit-transform: translate(100%, 0px);
+      -moz-transform: translate(100%, 0px);
+      -o-transform: translate(100%, 0px);
+      transform: translate(100%, 0px);
+  }
+  .view-animate.ng-enter.ng-enter-active {
+      -webkit-transform: translate(0px, 0px);
+      -moz-transform: translate(0px, 0px);
+      -o-transform: translate(0px, 0px);
+      ;
+      transform: translate(0px, 0px);
+      ;
+  }
+  .view-animate.ng-leave {
+      -webkit-transition: 1s linear all;
+      Safari/Chrome transition: 1s linear all;
+      All other modern browsers and IE10+
+  }
+  .view-animate.ng-leave.ng-enter-active {
+      -webkit-transform: translate(-100%, 0px);
+      -moz-transform: translate(-100%, 0px);
+      -o-transform: translate(-100%, 0px);
+      transform: translate(-100%, 0px);
+  }
+*/
