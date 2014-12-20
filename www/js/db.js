@@ -32,6 +32,9 @@ w2\www
 
 
 {"DictWord":[{"name":"test","meaning":"name is name","dictId":null,"id":"AADBB30E0BEB4CF9BCBF2C2231E1ABE4"}]} 
+
+persistence.db.implementation
+
 */
 
 
@@ -45,7 +48,7 @@ var WDB = (function() {
         'ww2',
         '1.0', // DB version
         'WW2 database', // DB display name
-        10 * 1024 * 1024, // DB size
+     //   10 * 1024 * 1024, // DB size
         0 // SQLitePlugin Background processing disabled
     ); 
  
