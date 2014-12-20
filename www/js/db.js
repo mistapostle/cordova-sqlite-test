@@ -39,7 +39,7 @@ var WDB = (function() {
     function init(){
 
     }
-    /*
+     
      persistence.store.cordovasql.config(
         persistence,
         'ww2',
@@ -47,9 +47,9 @@ var WDB = (function() {
         'WW2 database', // DB display name
         10 * 1024 * 1024, // DB size
         0 // SQLitePlugin Background processing disabled
-    );*/
+    ); 
  
-    
+    /*
 	persistence.store.websql.config(
         persistence,
         'ww2',
@@ -58,7 +58,7 @@ var WDB = (function() {
         5 * 1024 * 1024, // DB size
         0 // SQLitePlugin Background processing disabled
     );
-
+    */
 //persistence.store.memory.config(persistence);	
 persistence.debug = true;
     var DictWord = persistence.define('DictWord', {
