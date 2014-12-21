@@ -63,35 +63,40 @@ var WDB = (function() {
         */
         //persistence.store.memory.config(persistence); 
         persistence.debug = true;
-        WDB.DictWord = persistence.define('DictWord', {
+        DictWord = persistence.define('DictWord', {
             name: "TEXT",
             meaning: "TEXT",
             dictId: "TEXT"
         });
-        WDB.DictWord.index("name");
+        DictWord.index("name");
 
-        WDB.Word = persistence.define('Word', {
+        Word = persistence.define('Word', {
             name: "TEXT",
             meaning: "TEXT",
             yinbiao: "TEXT"
         });
-        WDB.Word.index("name");
+        Word.index("name");
 
-        WDB.WTask = persistence.define('WTask', {
+        WTask = persistence.define('WTask', {
 
             stage: "INT",
             taskType: "INT",
             lastReviewDate: "DATE",
             nextReviewDate: "DATE"
         });
-        WDB.WTaskType = {
+        WTaskType = {
             Tingxie: 0
         };
 
-        WDB.Word.hasMany("tasks", WDB.WTask, "word");
-        WDB.WTask.index("taskType");
-        WDB.WTask.index(["nextReviewDate", "taskType"]);
+        Word.hasMany("tasks", WTask, "word");
+        WTask.index("taskType");
+        WTask.index(["nextReviewDate", "taskType"]);
         persistence.schemaSync();
+
+        WDB.DictWord = DictWord;
+        WDB.Word = Word;
+        WDB.WTask = WTask;
+        WDB.WTaskType = WTaskType;
     }
 
 
@@ -107,9 +112,7 @@ var WDB = (function() {
 
     return {
         init: init,
-        DictWord: DictWord,
-        Word: Word,
-        WTask: WTask,
+       
         addTingxieTask: function(word) {
             var t = new WTask({
                 word: word,
@@ -205,7 +208,6 @@ var WDB = (function() {
             WTask.all().destroyAll();
             Word.all().destroyAll();
             localStorage.removeItem("latestKiiWordCreatedAt");
-        },
-        WTaskType: WTaskType
+        }
     }
 })();
