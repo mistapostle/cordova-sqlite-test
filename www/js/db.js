@@ -65,8 +65,9 @@ var WDB = (function() {
         persistence.debug = true;
         DictWord = persistence.define('DictWord', {
             name: "TEXT",
-            meaning: "TEXT",
-            dictId: "TEXT"
+            offSet: "INT",
+            length:"INT",
+            dictId: "INT"
         });
         DictWord.index("name");
 
@@ -137,17 +138,18 @@ var WDB = (function() {
             persistence.flush();
             return w;
         },
-        addDictWord: function(name, meaning, dictId) {
+        addDictWord: function(name, start, length, dictId) {
             var w = new DictWord({
                 name: name,
-                meaning: meaning,
+                start: start,
+                length: length,
                 dictId: dictId
             });
             persistence.add(w);
             persistence.flush();
             return w;
         },
-        lockupDictWord: function(name, dictId, limit, callback) {
+        lockupDictWord: function(name, callback ,limit,dictId) {
             if (!limit) limit = 20
             var ts = DictWord.all().filter("name", ">=", name)
             if (dictId)

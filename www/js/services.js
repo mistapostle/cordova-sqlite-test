@@ -133,3 +133,41 @@ var KiiSerivce = {
         }
 
     } //end of KiiService 
+DictService = {
+    ids :{},
+    names:{},
+    lookupNameById:function(id){
+        if(!DictService.names.hasOwnProperty(id) ){
+             DictService.names[id] = localStorage.getItem("dictNames/"+id);
+        }
+        return DictService.names[id];
+    },
+    lookupIdByName:function(name){
+        if(!DictService.ids.hasOwnProperty(name)){
+             DictService.ids[name] = localStorage.getItem("dictIds/"+name);
+        }
+        return DictService.ids[name];
+    },
+    lookupDictCount: function(){
+        return localStorage.getItem("dictCount");
+    },
+    addDict:function(name){
+        var id = DictService.lookupIdByName(name);
+        if(!id){
+            var count = DictService.lookupDictCount();
+            if(!count){
+                count = 0 ;
+            }else{
+                count = parseInt(count);
+            }
+            count += 1 ;
+            localStorage.setItem("dictCount",count);
+            id = count ;
+            localStorage.setItem("dictIds/"+name , id);
+            localStorage.setItem("dictNames/"+id, name);
+            DictService.ids[name] = id ;
+            DictService.names[id] = name;
+        }
+        return id ;
+    }   
+}

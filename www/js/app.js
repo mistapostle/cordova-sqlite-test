@@ -107,7 +107,7 @@ var MasterController = module.controller('MasterController', function($scope, $d
     /*$scope.items = $data.items;  */
     applyCommonScope($scope, $data);
     $scope.timers = [];
-
+    $scope.searchText="";
     function init() {
         WDB.queryCurrentTaskCount(WDB.WTaskType.Tingxie, function(c) {
 
@@ -186,7 +186,12 @@ var MasterController = module.controller('MasterController', function($scope, $d
         //setInterval(addTimer,1000*60);
         //}
     addTimer();
+    $scope.search = function(){
+        console.log($scope.searchText);
+        $scope.push();
+        window.location.hash = "#/search/"+$scope.searchText;
 
+    }
     $scope.import = function() {
             function onSuccess(fileSystem) {
                 console.log(fileSystem.name);
@@ -227,6 +232,27 @@ var MasterController = module.controller('MasterController', function($scope, $d
     }*/
 });
 
+var SearchController = module.controller('SearchController', function($scope, $data,$routeParams) {
+    applyCommonScope($scope, $data);
+    $scope.searchText = $routeParams.searchText;
+    $scope.search  = function(){
+        $scope.searchResults = [];
+        WDB.lockupDictWord($scope.searchText,function _renderSearchResult(rs){
+            console.log(rs);
+            if(!rs || rs.length === 0 ) return;
+            var len = rs.length;
+            for(var i = 0 ; i < len ; i++){
+                var item = rs[i];
+                item.dict = DictService.lookupNameById(item.dictId);
+                $scope.searchResults.push(item);
+            }              
+            $scope.$apply();
+        } ,20 );
+    }
+    $scope.search();
+   
+})
+//http://viralpatel.net/blogs/angularjs-routing-and-views-tutorial-with-example/
 module.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
@@ -237,6 +263,10 @@ module.config(['$routeProvider',
         when('/tingxie', {
             templateUrl: 'partials/tingxie.html',
             controller: 'TingxieController'
+        }).
+        when('/search/:searchText', {
+            templateUrl: 'partials/search.html',
+            controller: 'SearchController'
         }).
         otherwise({
             redirectTo: '/main'

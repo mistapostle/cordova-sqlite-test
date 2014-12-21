@@ -19,6 +19,8 @@
       </div>
     </div>
     <div class="container-fluid" style="padding: 50px 0px 0px 0px;  " >
+<input type="text" name="searchIp" ng-model="searchText" />
+<button ng-click="search()"  >Search</button>
 <div class="list-group"  >
     <a href="javascript:void(9)" class="list-group-item " ng-click="cancelNotification()">
            单词本 
@@ -26,6 +28,7 @@
     <a href="#/tingxie"  ng-click="push( )" class="list-group-item">听写 ({{ tingxieCount }})
           <span class="glyphicon glyphicon-chevron-right badge"> </span>
         </a>
+      
     <a href="javascript:void(9)" ng-click="importWordsFromKii()" class="list-group-item">导入</a> 
     <a href="javascript:void(9)" ng-click="clearDB()" class="list-group-item">清空db</a> 
 
