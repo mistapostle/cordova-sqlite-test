@@ -23,6 +23,7 @@ function applyCommonScope($scope, $data) {
     $data.aclass = "";
 } 
 function onDeviceReady() {
+    console.log("go")
     try{
         NotificationService.init();
     }catch(err){
@@ -33,8 +34,10 @@ function onDeviceReady() {
     console.log("done");
     angular.bootstrap(document, ['myApp']);
 }
-if(document.onDeviceReady ){
-    document.addEventListener(onInitEvent,onDeviceReady, false)
+ //document.addEventListener('deviceready', onDeviceReady, false);
+ 
+if(!typeof(cordova) === "undefined" ){
+   document.addEventListener('deviceready',onDeviceReady, false) 
 }else{
     $(onDeviceReady);
 } 
