@@ -49,6 +49,7 @@ persistence.store.cordovasql.config = function (persistence, dbname, dbversion, 
   persistence.db.conn = null;
 
   /* Find out if sqliteplugin is loaded. Otherwise, we'll fall back to WebSql */
+  console.log("is sqlitePlugin here?"+ ('sqlitePlugin' in window));
   if (window && 'sqlitePlugin' in window) {
     persistence.db.implementation = 'sqliteplugin';
   } else if (window && window.openDatabase) {

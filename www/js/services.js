@@ -94,13 +94,12 @@ var KiiSerivce = {
             var appBucket = Kii.bucketWithName("words");
             // Build "all" query
             var all_query = (localStorage.getItem("latestKiiWordCreatedAt") &&
-                                KiiQuery.queryWithClause( KiiClause.greaterThan("_created", 
-                                    parseInt(localStorage.getItem("latestKiiWordCreatedAt") ))) ) 
-                                || KiiQuery.queryWithClause(); 
-            
+                KiiQuery.queryWithClause(KiiClause.greaterThan("_created",
+                    parseInt(localStorage.getItem("latestKiiWordCreatedAt"))))) || KiiQuery.queryWithClause();
+
             all_query.sortByAsc("_created");
             // Define the callbacks
-            var total = 0 ;
+            var total = 0;
             var queryCallbacks = {
                 success: function(queryPerformed, resultSet, nextQuery) {
                     // do something with the results
@@ -110,20 +109,20 @@ var KiiSerivce = {
                         total++;
                         WDB.checkAndAddWordAndTingxieTask(obj.get("name"), obj.get("meaning"), obj.get("yinbiao"));
 
-                        localStorage.setItem("latestKiiWordCreatedAt", obj.getCreated());  
+                        localStorage.setItem("latestKiiWordCreatedAt", obj.getCreated());
                     }
                     if (nextQuery != null) {
                         // There are more results (pages).
                         // Execute the next query to get more results.
                         appBucket.executeQuery(nextQuery, queryCallbacks);
                     } else {
-                        
+
                         cb();
                         alert("load finished , total " + total + " words get from Kii");
                     }
                 },
                 failure: function(queryPerformed, anErrorString) {
-                     alert("query failed : " + anErrorString);
+                    alert("query failed : " + anErrorString);
 
                 }
             }
@@ -134,40 +133,89 @@ var KiiSerivce = {
 
     } //end of KiiService 
 DictService = {
-    ids :{},
-    names:{},
-    lookupNameById:function(id){
-        if(!DictService.names.hasOwnProperty(id) ){
-             DictService.names[id] = localStorage.getItem("dictNames/"+id);
+    ids: {},
+    names: {},
+    lookupNameById: function(id) {
+        if (!DictService.names.hasOwnProperty(id)) {
+            DictService.names[id] = localStorage.getItem("dictNames/" + id);
         }
         return DictService.names[id];
     },
-    lookupIdByName:function(name){
-        if(!DictService.ids.hasOwnProperty(name)){
-             DictService.ids[name] = localStorage.getItem("dictIds/"+name);
+    lookupIdByName: function(name) {
+        if (!DictService.ids.hasOwnProperty(name)) {
+            DictService.ids[name] = localStorage.getItem("dictIds/" + name);
         }
         return DictService.ids[name];
     },
-    lookupDictCount: function(){
+    lookupDictCount: function() {
         return localStorage.getItem("dictCount");
     },
-    addDict:function(name){
+    addDict: function(name) {
         var id = DictService.lookupIdByName(name);
-        if(!id){
+        if (!id) {
             var count = DictService.lookupDictCount();
-            if(!count){
-                count = 0 ;
-            }else{
+            if (!count) {
+                count = 0;
+            } else {
                 count = parseInt(count);
             }
-            count += 1 ;
-            localStorage.setItem("dictCount",count);
-            id = count ;
-            localStorage.setItem("dictIds/"+name , id);
-            localStorage.setItem("dictNames/"+id, name);
-            DictService.ids[name] = id ;
+            count += 1;
+            localStorage.setItem("dictCount", count);
+            id = count;
+            localStorage.setItem("dictIds/" + name, id);
+            localStorage.setItem("dictNames/" + id, name);
+            DictService.ids[name] = id;
             DictService.names[id] = name;
         }
-        return id ;
-    }   
+        return id;
+    },
+    importDict: function(filePath,dictName) {
+        var dictId = DictService.addDict(dictName);
+         FileService.openFile(filePath, function _read(file){
+            var reader = new FileReader();
+            
+            reader.onloadend = function(evt) {
+                
+                var content = evt.target.result;
+                var lines = content.split('\n');
+                content = null;
+                evt.target.result = null;
+                var len = lines.length;
+                for(var i = 0 ; i < len ; i++){
+                    var line = lines[i].split(',');
+                    var word = line[0];
+                    var offset = line[1];
+                    var length = line[2];
+                    WDB.addDictWord(word, offset,length, dictId);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+
+    }
 }
+FileService = (function(){
+    function openFile(filePath, success, fail){
+        function onSuccess(fileSystem) {
+            console.log(fileSystem.name);
+            fileSystem.root.getFile(filePath, null, gotFileEntry, onfail);
+        }
+
+        function gotFileEntry(fileEntry) {
+            fileEntry.file(gotFile, onfail);
+        }
+
+        function gotFile(file) {
+            success(file);
+        }
+ 
+        function onfail(evt) {
+                alert(evt.target.error.code);
+                if(fail) fail(evt);
+            }
+            //TODO check phonegap ready
+            // request the persistent file system
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onSuccess, onfail);
+    }
+})()
