@@ -193,9 +193,27 @@ DictService = {
         });
 
 
+    },
+    loadMeaning: function(word,callback,path){
+        var start = word.start ;
+        var end = word.start + word.length;
+        if(!path) path = "download/abc";
+        FileService.openFile(path,function(file){
+            var p = file.slice(start,end);
+            var reader = new FileReader();
+             reader.onloadend = function(evt) {
+                
+                var bytes = evt.target.result;
+                var text = pako.inflate( bytes,{windowBits:-15,to:"string"} );
+                callback(text);
+            };
+            reader.readAsText(file);
+        })
     }
 }
 FileService = (function(){
+    var requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem ;
+    var localFileSystem =  typeof(LocalFileSystem) !== 'undefined' && LocalFileSystem || webkitStorageInfo ;
     function openFile(filePath, success, fail){
         function onSuccess(fileSystem) {
             console.log(fileSystem.name);
@@ -211,11 +229,14 @@ FileService = (function(){
         }
  
         function onfail(evt) {
-                alert(evt.target.error.code);
+                 
+                console.log("evt",evt);
                 if(fail) fail(evt);
-            }
-            //TODO check phonegap ready
+            } 
             // request the persistent file system
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onSuccess, onfail);
-    }
+        requestFileSystem(localFileSystem, 0, onSuccess, onfail);
+    } 
+    return {
+        openFile:openFile
+    };
 })()

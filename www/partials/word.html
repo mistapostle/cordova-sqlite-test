@@ -25,19 +25,8 @@
 
 <div class="container-fluid" style="padding-top: 50px; ">
      
-     <input type="text" name="searchIp" ng-model="searchText" />
-<button ng-click="search()"  >Search</button>
-<ul><li ng-repeat="item in searchResults">{{item.name}} : {{item.dict}}</li></ul>
-
-<div class="list-group"  ng-repeat="item in searchResults" >
-   
-    <a href="#/word/{{ $index}}"  ng-click="push( )" class="list-group-item">{{item.name}} : {{item.dict}}
-          <span class="glyphicon glyphicon-chevron-right badge"> </span>
-        </a>
-    
-</div>
-
-
+    {{$scope.word.name}} <br/>
+    {{$scope.word.meaning}}
 </div>
 <!--end container -->
 

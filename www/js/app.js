@@ -250,10 +250,22 @@ var SearchController = module.controller('SearchController', function($scope, $d
                 $scope.searchResults.push(item);
             }              
             $scope.$apply();
+            $data.searchResults = $scope.searchResults;
         } ,20 );
-    }
+    } 
     $scope.search();
-   
+    
+})
+var WordController = module.controller('WordController', function($scope, $data,$routeParams) {
+    applyCommonScope($scope, $data);
+    var index = $routeParams.index;
+    $scope.word = $data.searchResults[index];
+    DictService.loadMeaning(word, function(text){
+         
+         $scope.apply(function(){
+            $scope.word.meaning = text ; 
+         });
+    });
 })
 //http://viralpatel.net/blogs/angularjs-routing-and-views-tutorial-with-example/
 module.config(['$routeProvider',
@@ -270,6 +282,10 @@ module.config(['$routeProvider',
         when('/search/:searchText', {
             templateUrl: 'partials/search.html',
             controller: 'SearchController'
+        }).
+        when('/word/:index', {
+            templateUrl: 'partials/search.html',
+            controller: 'WordController'
         }).
         otherwise({
             redirectTo: '/main'
